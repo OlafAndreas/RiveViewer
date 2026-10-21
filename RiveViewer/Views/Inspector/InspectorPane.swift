@@ -13,6 +13,7 @@ struct InspectorPane: View {
             DataBindingSection(controller: controller)
             TextRunsSection(controller: controller)
             EventsSection(controller: controller)
+            ObjectsSection(controller: controller)
         }
         .formStyle(.grouped)
     }

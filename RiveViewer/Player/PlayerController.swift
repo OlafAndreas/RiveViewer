@@ -32,6 +32,12 @@ final class PlayerController {
     /// Incremented whenever a bound property changes, so views re-read live values.
     private(set) var dataBindingRevision = 0
     private(set) var textRunLookups: [TextRunLookup] = []
+    /// Results of parsing the .riv container itself (independent of the runtime).
+    private(set) var rawFile: RiveBinaryFile?
+    private(set) var rawFileError: String?
+    private(set) var textRuns: [TextRunEntry] = []
+    private(set) var objectRoots: [RiveObjectNode] = []
+    @ObservationIgnored private var parseTask: Task<Void, Never>?
 
     var selection: PlaybackSelection? {
         didSet {
@@ -98,6 +104,7 @@ final class PlayerController {
             self.file = file
             self.summary = summary
             self.loadError = nil
+            parseContainer(data)
             let reconciled = DefaultPlayback.reconcile(selection, in: summary)
             log.notice("opened \(self.fileName, privacy: .public): artboards=\(summary.artboards.count) selection=\(reconciled?.logDescription ?? "none", privacy: .public)")
             if reconciled == selection {
@@ -116,6 +123,35 @@ final class PlayerController {
             load(data: try Data(contentsOf: fileURL))
         } catch {
             fail(RiveViewerError.unreadableFile(fileURL))
+        }
+    }
+
+    private func parseContainer(_ data: Data) {
+        parseTask?.cancel()
+        rawFile = nil
+        rawFileError = nil
+        textRuns = []
+        objectRoots = []
+        log.notice("parsing container: \(data.count) bytes")
+        parseTask = Task.detached(priority: .utility) { [weak self] in
+            var reader = RiveBinaryReader(data: data)
+            let result = Result<RiveBinaryFile, any Error> { try reader.readFile() }
+            let parsed = result.map { file in (file, TextRunCatalog.textRuns(in: file), RiveObjectTree.roots(of: file)) }
+            guard !Task.isCancelled else { return }
+            await MainActor.run { self?.applyContainer(parsed) }
+        }
+    }
+
+    private func applyContainer(_ parsed: Result<(RiveBinaryFile, [TextRunEntry], [RiveObjectNode]), any Error>) {
+        switch parsed {
+        case .success(let (file, runs, roots)):
+            rawFile = file
+            textRuns = runs
+            objectRoots = roots
+            log.notice("raw structure: objects=\(file.objects.count) textRuns=\(runs.count)")
+        case .failure(let error):
+            rawFileError = String(describing: error)
+            log.notice("raw structure unavailable: \(String(describing: error), privacy: .public)")
         }
     }
 

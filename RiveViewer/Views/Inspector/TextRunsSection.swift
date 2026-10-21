@@ -1,6 +1,8 @@
+import RiveViewerKit
 import SwiftUI
 
-/// The runtime cannot enumerate text runs, so the user looks them up by name and edits the value in place.
+/// Text runs found in the file (editable when they belong to the current artboard), plus a manual lookup
+/// for runs inside nested artboards.
 struct TextRunsSection: View {
     @Bindable var controller: PlayerController
     @State private var name = ""
@@ -10,18 +12,23 @@ struct TextRunsSection: View {
 
     var body: some View {
         Section("Text runs") {
-            TextField("Text run name", text: $name)
-                .onSubmit(lookUp)
-            TextField("Nested artboard path (optional)", text: $path)
-                .onSubmit(lookUp)
-            Button("Look up", action: lookUp)
-                .disabled(trimmedName.isEmpty)
-            if controller.textRunLookups.isEmpty {
-                Text("Enter a text run's name as shown in the Rive editor; the runtime cannot list them.")
+            if controller.textRuns.isEmpty {
+                Text(controller.rawFile == nil ? "Reading file structure…" : "No named text runs in this file.")
                     .foregroundStyle(.secondary)
             }
-            ForEach(controller.textRunLookups) { lookup in
-                TextRunRow(lookup: lookup, controller: controller)
+            ForEach(controller.textRuns) { entry in
+                CatalogRow(entry: entry, controller: controller)
+            }
+            DisclosureGroup("Look up by nested path") {
+                TextField("Text run name", text: $name)
+                    .onSubmit(lookUp)
+                TextField("Nested artboard path", text: $path)
+                    .onSubmit(lookUp)
+                Button("Look up", action: lookUp)
+                    .disabled(trimmedName.isEmpty)
+                ForEach(controller.textRunLookups) { lookup in
+                    LookupRow(lookup: lookup, controller: controller)
+                }
             }
         }
     }
@@ -33,7 +40,52 @@ struct TextRunsSection: View {
     }
 }
 
-private struct TextRunRow: View {
+private struct CatalogRow: View {
+    let entry: TextRunEntry
+    let controller: PlayerController
+    @State private var draft = ""
+    @State private var failure: String?
+
+    private var isInCurrentArtboard: Bool { entry.artboardName == controller.currentArtboard?.name }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            LabeledContent {
+                if isInCurrentArtboard {
+                    TextField("Value", text: $draft)
+                        .labelsHidden()
+                        .onSubmit(commit)
+                } else {
+                    Text("“\(entry.text)”")
+                        .foregroundStyle(.secondary)
+                }
+            } label: {
+                Text(entry.name)
+                if let artboard = entry.artboardName, !isInCurrentArtboard {
+                    Text("in \(artboard)")
+                }
+            }
+            if let failure {
+                Text(failure)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+        }
+        .onAppear { draft = controller.textRunValue(name: entry.name, path: "") ?? entry.text }
+        .onChange(of: controller.selection) { _, _ in draft = controller.textRunValue(name: entry.name, path: "") ?? entry.text }
+    }
+
+    private func commit() {
+        do {
+            try controller.setTextRun(name: entry.name, path: "", value: draft)
+            failure = nil
+        } catch {
+            failure = error.localizedDescription
+        }
+    }
+}
+
+private struct LookupRow: View {
     let lookup: TextRunLookup
     let controller: PlayerController
     @State private var draft = ""
