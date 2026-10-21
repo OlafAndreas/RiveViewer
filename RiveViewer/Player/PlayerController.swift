@@ -31,6 +31,7 @@ final class PlayerController {
     private(set) var dataBindingRoots: [DataBindingNode] = []
     /// Incremented whenever a bound property changes, so views re-read live values.
     private(set) var dataBindingRevision = 0
+    private(set) var textRunLookups: [TextRunLookup] = []
 
     var selection: PlaybackSelection? {
         didSet {
@@ -153,6 +154,7 @@ final class PlayerController {
             loadError = nil
             rebuildInputs()
             bindDataModel()
+            refreshTextRunLookups()
             log.notice("playing \(selection.logDescription, privacy: .public) on artboard instance \(viewModel.riveModel?.artboard.name() ?? "-", privacy: .public)")
             if let animation = currentAnimation {
                 loopMode = animation.loop
@@ -333,5 +335,38 @@ final class PlayerController {
 
     func clearEvents() {
         eventLog.removeAll()
+    }
+
+    // MARK: Text runs
+
+    func textRunValue(name: String, path: String) -> String? {
+        guard let viewModel else { return nil }
+        return path.isEmpty ? viewModel.getTextRunValue(name) : viewModel.getTextRunValue(name, path: path)
+    }
+
+    func setTextRun(name: String, path: String, value: String) throws {
+        guard let viewModel else { return }
+        if path.isEmpty {
+            try viewModel.setTextRunValue(name, textValue: value)
+        } else {
+            try viewModel.setTextRunValue(name, path: path, textValue: value)
+        }
+        refreshTextRunLookups()
+        if !isPlaying { viewModel.riveView?.advance(delta: 0) }
+        append(.playback("Text run \(name) = “\(value)”"))
+    }
+
+    func addTextRunLookup(name: String, path: String) {
+        textRunLookups.append(TextRunLookup(id: UUID(), name: name, path: path, lastValue: textRunValue(name: name, path: path)))
+    }
+
+    func removeTextRunLookup(id: UUID) {
+        textRunLookups.removeAll { $0.id == id }
+    }
+
+    private func refreshTextRunLookups() {
+        for index in textRunLookups.indices {
+            textRunLookups[index].lastValue = textRunValue(name: textRunLookups[index].name, path: textRunLookups[index].path)
+        }
     }
 }
