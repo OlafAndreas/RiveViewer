@@ -27,6 +27,11 @@ final class DataBindingNode: Identifiable {
         }
     }
 
+    /// Every node in the given subtrees, depth first.
+    static func flattened(_ nodes: [DataBindingNode]) -> [DataBindingNode] {
+        nodes.flatMap { [$0] + flattened($0.children ?? []) }
+    }
+
     static func nodes(of instance: RiveDataBindingViewModel.Instance, parentPath: String? = nil, depth: Int = 0) -> [DataBindingNode] {
         instance.properties.map { data in
             DataBindingNode(

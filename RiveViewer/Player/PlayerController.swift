@@ -31,6 +31,15 @@ final class PlayerController {
     private(set) var dataBindingRoots: [DataBindingNode] = []
     /// Incremented whenever a bound property changes, so views re-read live values.
     private(set) var dataBindingRevision = 0
+    /// Rolling value history of every numeric data-binding property, keyed by node path.
+    private(set) var numberHistories: [String: ValueHistory] = [:]
+    /// Seconds advanced since the selection was applied, in both playback modes.
+    private(set) var historyClock: Double = 0
+    /// Paths whose history chart the user folded away.
+    var collapsedHistories: Set<String> = []
+    @ObservationIgnored private var numberNodes: [DataBindingNode] = []
+    @ObservationIgnored private var didLogHistory = false
+    @ObservationIgnored private var didLogAdvance = false
     private(set) var textRunLookups: [TextRunLookup] = []
     /// Results of parsing the .riv container itself (independent of the runtime).
     private(set) var rawFile: RiveBinaryFile?
@@ -229,11 +238,26 @@ final class PlayerController {
     }
 
     private func handleAdvance(_ seconds: Double) {
+        if !didLogAdvance { didLogAdvance = true; log.notice("first advance: dt=\(seconds) numberNodes=\(self.numberNodes.count)") }
         guard let model = viewModel?.riveModel else { return }
         if let animation = model.animation {
             currentTime = Double(animation.time())
         } else {
             elapsed += seconds
+        }
+        historyClock += seconds
+        sampleHistories()
+    }
+
+    private func sampleHistories() {
+        guard !numberNodes.isEmpty else { return }
+        for node in numberNodes {
+            guard let value = node.numberProperty?.value else { continue }
+            numberHistories[node.path, default: ValueHistory()].append(time: historyClock, value: Double(value))
+        }
+        if !didLogHistory {
+            didLogHistory = true
+            log.notice("history: \(self.numberNodes.count) numeric properties sampled")
         }
     }
 
@@ -249,6 +273,8 @@ final class PlayerController {
         boundInstance = nil
         boundViewModelName = nil
         dataBindingRoots = []
+        numberNodes = []
+        numberHistories = [:]
         guard let model = viewModel?.riveModel, let artboard = model.artboard else {
             log.notice("data binding: no model or artboard")
             return
@@ -267,6 +293,10 @@ final class PlayerController {
         boundViewModelName = viewModel.name
         dataBindingRoots = DataBindingNode.nodes(of: instance)
         dataBindingRoots.forEach { $0.observe { [weak self] in self?.dataBindingRevision += 1 } }
+        numberNodes = DataBindingNode.flattened(dataBindingRoots).filter { $0.type == .number }
+        numberHistories = [:]
+        historyClock = 0
+        didLogHistory = false
         log.notice("data binding: \(viewModel.name, privacy: .public)/\(instance.name, privacy: .public) properties=\(instance.propertyCount)")
     }
 

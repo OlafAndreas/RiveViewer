@@ -33,6 +33,15 @@ private struct DataBindingRow: View {
     let node: DataBindingNode
     let controller: PlayerController
 
+    private var historyExpanded: Binding<Bool> {
+        Binding(
+            get: { !controller.collapsedHistories.contains(node.path) },
+            set: { expanded in
+                if expanded { controller.collapsedHistories.remove(node.path) } else { controller.collapsedHistories.insert(node.path) }
+            }
+        )
+    }
+
     var body: some View {
         let _ = controller.dataBindingRevision
         switch node.type {
@@ -42,13 +51,22 @@ private struct DataBindingRow: View {
                 set: { node.stringProperty?.value = $0; controller.dataBindingDidChange() }
             ))
         case .number:
-            LabeledContent(node.name) {
-                TextField("Value", value: Binding(
-                    get: { node.numberProperty?.value ?? 0 },
-                    set: { node.numberProperty?.value = $0; controller.dataBindingDidChange() }
-                ), format: .number)
-                .labelsHidden()
-                .frame(minWidth: 64, idealWidth: 96)
+            VStack(alignment: .leading, spacing: 4) {
+                LabeledContent(node.name) {
+                    TextField("Value", value: Binding(
+                        get: { node.numberProperty?.value ?? 0 },
+                        set: { node.numberProperty?.value = $0; controller.dataBindingDidChange() }
+                    ), format: .number)
+                    .labelsHidden()
+                    .frame(minWidth: 64, idealWidth: 96)
+                }
+                DisclosureGroup(isExpanded: historyExpanded) {
+                    NumberHistoryChart(history: controller.numberHistories[node.path] ?? ValueHistory())
+                } label: {
+                    Text("History")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         case .boolean:
             Toggle(node.name, isOn: Binding(
