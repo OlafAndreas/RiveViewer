@@ -4,6 +4,8 @@ public enum RiveBinaryError: Error, Equatable, Sendable {
     case badFingerprint
     case truncated(offset: Int)
     case unknownPropertyKey(Int, offset: Int)
+    /// A variable-length integer was longer than 10 bytes or does not fit in an `Int`.
+    case overflow(offset: Int)
 }
 
 /// One property of a `.riv` object, typed by the file's own property table.
@@ -108,13 +110,13 @@ public struct RiveBinaryReader {
             throw RiveBinaryError.badFingerprint
         }
         offset = 4
-        let major = Int(try readVarUint())
-        let minor = Int(try readVarUint())
+        let major = try readInt()
+        let minor = try readInt()
         let fileId = try readVarUint()
 
         var keys: [Int] = []
         while true {
-            let key = Int(try readVarUint())
+            let key = try readInt()
             if key == 0 { break }
             keys.append(key)
         }
@@ -134,13 +136,13 @@ public struct RiveBinaryReader {
         var scopeId: Int?
         var localIndex = 0
         while offset < data.count {
-            let typeKey = Int(try readVarUint())
+            let typeKey = try readInt()
             var properties: [RiveProperty] = []
             while true {
                 let keyOffset = offset
-                let key = Int(try readVarUint())
+                let key = try readInt()
                 if key == 0 { break }
-                guard let fieldType = fieldTypes[key] ?? RiveSchema.fieldType(forPropertyKey: key) else {
+                guard let fieldType = RiveSchema.fieldType(forPropertyKey: key) ?? fieldTypes[key] else {
                     throw RiveBinaryError.unknownPropertyKey(key, offset: keyOffset)
                 }
                 properties.append(RiveProperty(key: key, value: try readValue(fieldType: fieldType)))
@@ -162,7 +164,7 @@ public struct RiveBinaryReader {
         switch fieldType {
         case 0: return .uint(try readVarUint())
         case 1:
-            let bytes = try readBytes(count: Int(try readVarUint()))
+            let bytes = try readBytes(count: try readInt())
             if let text = String(data: bytes, encoding: .utf8) { return .string(text) }
             return .bytes(bytes)
         case 2: return .double(Float(bitPattern: try readUInt32()))
@@ -178,14 +180,20 @@ public struct RiveBinaryReader {
     }
 
     private mutating func readVarUint() throws -> UInt64 {
+        let start = offset
         var result: UInt64 = 0
-        var shift: UInt64 = 0
-        while true {
+        for index in 0..<10 {
             let byte = try readByte()
-            if shift < 64 { result |= UInt64(byte & 0x7F) << shift }
+            result |= UInt64(byte & 0x7F) << UInt64(index * 7)
             if byte & 0x80 == 0 { return result }
-            shift += 7
         }
+        throw RiveBinaryError.overflow(offset: start)
+    }
+
+    private mutating func readInt() throws -> Int {
+        let start = offset
+        guard let value = Int(exactly: try readVarUint()) else { throw RiveBinaryError.overflow(offset: start) }
+        return value
     }
 
     private mutating func readUInt32() throws -> UInt32 {
@@ -194,7 +202,7 @@ public struct RiveBinaryReader {
     }
 
     private mutating func readBytes(count: Int) throws -> Data {
-        guard count >= 0, offset + count <= data.count else { throw RiveBinaryError.truncated(offset: offset) }
+        guard count >= 0, count <= data.count - offset else { throw RiveBinaryError.truncated(offset: offset) }
         let start = data.startIndex + offset
         offset += count
         return Data(data[start..<start + count])
