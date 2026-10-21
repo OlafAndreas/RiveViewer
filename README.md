@@ -51,7 +51,7 @@ make install   # builds Release, copies to ~/Applications and registers the Quic
 | `make register APP=path/to/RiveViewer.app` | Registers an already built app bundle (the Debug build by default). |
 | `make preview FILE=some.riv` | Opens a Quick Look panel for a file with `qlmanage`. |
 
-Builds are ad-hoc signed ("sign to run locally"). To sign with your own team, follow the comment at the top of `project.yml`.
+Builds are signed with the owner's team (automatic signing, hardened runtime on), so Xcode Cloud can archive, sign with Developer ID and notarize. To build under your own team, change `DEVELOPMENT_TEAM` in `project.yml` and run `make project`.
 
 ## Quick Look registration
 
