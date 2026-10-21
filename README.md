@@ -2,6 +2,8 @@
 
 A macOS inspector for Rive (`.riv`) animation files, plus Quick Look extensions so Finder plays them with the space bar and shows them as icons.
 
+RiveViewer is an independent open-source project and is not affiliated with or endorsed by Rive, Inc. "Rive" is a trademark of its owner.
+
 Requires macOS 14 or later. Built with Xcode 27, Swift 6, the official [Rive Apple runtime](https://github.com/rive-app/rive-ios) 6.28.1 and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
 ## What it does
@@ -13,8 +15,9 @@ Requires macOS 14 or later. Built with Xcode 27, Swift 6, the official [Rive App
 - Transport: play/pause, restart, frame stepping, loop mode (one shot, loop, ping-pong) and a scrubber for animations; elapsed time and a "Settled" badge for state machines.
 - Inspector pane: selection details (fps, frames, work area, loop, layers); live state-machine inputs (toggles, number fields with sliders, trigger buttons); the artboard's default data-binding view model with editors for strings, numbers, booleans, colours, enums and triggers, nested view models expanded, and a rolling 10-second history graph under every numeric property; text runs found in the file (editable for the current artboard) and a manual lookup for nested paths; an event log of state changes, Rive events and playback; and the raw object tree of the file with every property.
 - Reload (`⌘R`) re-reads the file from disk and keeps the selection when it still exists.
+- Export GIF (File ▸ Export GIF…, `⇧⌘E`) renders the current state machine from its initial state at 10, 15 or 25 fps into a looping GIF, optionally with a transparent background.
 
-**Quick Look preview** (`RiveQuickLook.appex`): press space on a `.riv` in Finder and it plays. The preview runs the file's default state machine; if that settles (input-driven files settle at once, files with an intro after it ends) it switches to the artboard's longest animation and loops it, so the panel keeps moving whenever the file has any animation.
+**Quick Look preview** (`RiveQuickLook.appex`): press space on a `.riv` in Finder and it plays. The preview runs the file's default state machine; if that settles (input-driven files settle at once, files with an intro after it ends) it switches to the longest animation on that artboard (or, if it has none, on the first artboard that has one) and loops it, so the panel keeps moving whenever the file has any animation.
 
 **Thumbnails** (`RiveThumbnail.appex`): Finder, Open dialogs and Spotlight show the first frame of the first artboard that has a state machine as the file's icon. Files with only timeline animations keep the generic icon (the offscreen renderer needs a state machine).
 
@@ -22,12 +25,22 @@ Requires macOS 14 or later. Built with Xcode 27, Swift 6, the official [Rive App
 
 | Keys | Action |
 | --- | --- |
-| Space | Play / pause |
+| Space | Play / pause while the canvas has focus (click the canvas) |
+| `⌥⌘P` | Play / pause from anywhere |
 | `⌘0` | Restart |
 | `⌥←` / `⌥→` | Step one frame back / forward (animations) |
 | `⌘R` | Reload the file from disk |
+| `⇧⌘E` | Export GIF |
 
-## Building
+## Building from source
+
+```sh
+brew install xcodegen
+git clone <this repository>
+cd RiveViewer
+make install   # builds Release, copies to ~/Applications and registers the Quick Look extensions
+```
+
 
 | Command | What it does |
 | --- | --- |
@@ -62,5 +75,9 @@ Everything logs to the unified log under the subsystem `no.olafandreas.RiveViewe
 ## Known limits
 
 - The runtime API cannot list text runs; the inspector lists them by parsing the file container instead. Files written with a newer Rive format than the generated schema knows show "Structure unavailable" in the Objects section while everything else keeps working.
-- Thumbnails need a state machine in the file.
+- Thumbnails and GIF export need a state machine: the offscreen renderer in the Rive runtime only drives state machines. A state machine that settles immediately exports as a still image.
 - Numeric input values and data-binding numbers are typed in your locale; technical readouts (times, frames, chart labels) use a dot decimal separator.
+
+## License
+
+MIT, see [LICENSE](LICENSE). The test fixtures in `Packages/RiveViewerKit/Tests/RiveViewerKitTests/Fixtures` come from [rive-app/rive-ios](https://github.com/rive-app/rive-ios) under its MIT license.
