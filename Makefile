@@ -33,6 +33,7 @@ APP ?= $(DERIVED)/Build/Products/Debug/$(APP_NAME)
 register:
 	$(LSREGISTER) -f "$(APP)"
 	pluginkit -a "$(APP)/Contents/PlugIns/RiveQuickLook.appex"
+	pluginkit -a "$(APP)/Contents/PlugIns/RiveThumbnail.appex"
 	qlmanage -r
 	qlmanage -r cache
 

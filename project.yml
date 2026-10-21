@@ -48,6 +48,7 @@ targets:
       - package: RiveViewerKit
       - package: RiveRuntime
       - target: RiveQuickLook
+      - target: RiveThumbnail
   RiveQuickLook:
     type: app-extension
     platform: macOS
@@ -67,6 +68,31 @@ targets:
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewViewController
     entitlements:
       path: RiveQuickLook/RiveQuickLook.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+    dependencies:
+      - package: RiveViewerKit
+      - package: RiveRuntime
+  RiveThumbnail:
+    type: app-extension
+    platform: macOS
+    sources:
+      - RiveThumbnail
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: no.olafandreas.RiveViewer.Thumbnail
+    info:
+      path: RiveThumbnail/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionAttributes:
+            QLSupportedContentTypes: [app.rive.riv]
+            QLThumbnailMinimumDimension: 0
+          NSExtensionPointIdentifier: com.apple.quicklook.thumbnail
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ThumbnailProvider
+    entitlements:
+      path: RiveThumbnail/RiveThumbnail.entitlements
       properties:
         com.apple.security.app-sandbox: true
         com.apple.security.files.user-selected.read-only: true
