@@ -23,6 +23,8 @@ final class PlayerController {
     /// True once a state machine stopped advancing on its own.
     private(set) var isSettled = false
     private(set) var eventLog: [EventLogEntry] = []
+    /// Inputs of the running state machine (empty in animation mode).
+    private(set) var inputs: [LiveInput] = []
 
     var selection: PlaybackSelection? {
         didSet {
@@ -135,14 +137,16 @@ final class PlayerController {
             let viewModel: InspectorRiveViewModel
             switch selection {
             case .stateMachine(_, let name):
-                viewModel = InspectorRiveViewModel(model, stateMachineName: name, fit: fit, alignment: alignment, autoPlay: true)
+                viewModel = InspectorRiveViewModel(model, stateMachineName: name, fit: fit, alignment: alignment, autoPlay: true, artboardName: selection.artboardName)
             case .animation(_, let name):
-                viewModel = InspectorRiveViewModel(model, animationName: name, fit: fit, alignment: alignment, autoPlay: true)
+                viewModel = InspectorRiveViewModel(model, animationName: name, fit: fit, alignment: alignment, autoPlay: true, artboardName: selection.artboardName)
             }
             wire(viewModel)
             self.viewModel = viewModel
             isPlaying = true
             loadError = nil
+            rebuildInputs()
+            log.notice("playing \(selection.logDescription, privacy: .public) on artboard instance \(viewModel.riveModel?.artboard.name() ?? "-", privacy: .public)")
             if let animation = currentAnimation {
                 loopMode = animation.loop
             }
@@ -196,6 +200,31 @@ final class PlayerController {
         }
     }
 
+    private func rebuildInputs() {
+        guard let stateMachine = viewModel?.riveModel?.stateMachine else {
+            inputs = []
+            return
+        }
+        var rebuilt: [LiveInput] = []
+        for index in 0..<stateMachine.inputCount() {
+            guard let input = try? stateMachine.input(from: index) else { continue }
+            let kind: InputSummary.Kind
+            var boolValue = false
+            var numberValue: Float = 0
+            if input.isBoolean(), let bool = input as? RiveSMIBool {
+                boolValue = bool.value()
+                kind = .boolean(initial: boolValue)
+            } else if input.isNumber(), let number = input as? RiveSMINumber {
+                numberValue = number.value()
+                kind = .number(initial: numberValue)
+            } else {
+                kind = .trigger
+            }
+            rebuilt.append(LiveInput(summary: InputSummary(name: input.name(), kind: kind), boolValue: boolValue, numberValue: numberValue, controller: self))
+        }
+        inputs = rebuilt
+    }
+
     private func applyLoopMode() {
         viewModel?.riveModel?.animation?.loop(Int32(loopMode.rawValue))
     }
@@ -228,6 +257,24 @@ final class PlayerController {
         isSettled = false
         isPlaying = true
         append(.playback("Restart"))
+        rebuildInputs()
+    }
+
+    // MARK: Inputs
+
+    func setInput(_ name: String, bool: Bool) {
+        viewModel?.setInput(name, value: bool)
+        append(.playback("Input \(name) = \(bool)"))
+    }
+
+    func setInput(_ name: String, number: Float) {
+        viewModel?.setInput(name, value: number)
+        append(.playback("Input \(name) = \(number)"))
+    }
+
+    func fire(_ name: String) {
+        viewModel?.triggerInput(name)
+        append(.playback("Trigger \(name)"))
     }
 
     /// Moves an animation to `time` and redraws, without changing the play state.

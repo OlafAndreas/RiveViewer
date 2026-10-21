@@ -3,12 +3,27 @@ import SwiftUI
 
 struct DocumentView: View {
     @Bindable var controller: PlayerController
+    @State private var showsInspector = true
 
     var body: some View {
         NavigationSplitView {
             FileOutlineView(controller: controller)
         } detail: {
             detail
+        }
+        .inspector(isPresented: $showsInspector) {
+            InspectorPane(controller: controller)
+                .inspectorColumnWidth(min: 280, ideal: 340, max: 520)
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showsInspector.toggle()
+                } label: {
+                    Label("Inspector", systemImage: "sidebar.trailing")
+                }
+                .help("Show or hide the inspector")
+            }
         }
         .focusedSceneValue(\.playerController, controller)
     }
