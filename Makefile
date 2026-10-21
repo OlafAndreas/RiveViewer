@@ -5,7 +5,7 @@ KIT        := Packages/RiveViewerKit
 APP_NAME   := RiveViewer.app
 INSTALL_DIR := $(HOME)/Applications
 LSREGISTER := /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister
-XCODEBUILD := xcodebuild -project $(PROJECT) -scheme $(SCHEME) -derivedDataPath $(DERIVED) -quiet
+XCODEBUILD := xcodebuild -project $(PROJECT) -scheme $(SCHEME) -derivedDataPath $(DERIVED) -allowProvisioningUpdates -quiet
 
 .PHONY: project test build release install register preview clean
 
