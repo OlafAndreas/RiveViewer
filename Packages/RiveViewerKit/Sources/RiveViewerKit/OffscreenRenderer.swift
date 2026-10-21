@@ -12,51 +12,97 @@ public enum OffscreenRenderError: Error, Sendable, Equatable {
     case noStateMachine
 }
 
-/// Renders one frame of a `.riv` file into a `CGImage` without a window, using the runtime's command-queue renderer.
+/// Renders frames of a `.riv` file into `CGImage`s without a window, using the runtime's command-queue renderer.
 @MainActor
 public enum OffscreenRenderer {
     /// The first frame of the default state machine of the first artboard that has one, fitted into `size` (points, 1x).
     public static func firstFrame(of data: Data, size: CGSize) async throws -> CGImage {
-        guard let device = MTLCreateSystemDefaultDevice() else { throw OffscreenRenderError.noMetalDevice }
-        let width = max(Int(size.width.rounded()), 1)
-        let height = max(Int(size.height.rounded()), 1)
+        let session = try await Session(data: data, size: size) { file in try await makeRive(file: file) }
+        session.rive.stateMachine.advance(by: 0)
+        return try await session.draw()
+    }
 
-        let worker = Worker(device: device)
-        let file = try await File(source: .data(data), worker: worker)
-        let rive = try await makeRive(file: file)
-        rive.stateMachine.advance(by: 0)
+    /// `count` frames of one artboard and state machine, starting from its initial state and advancing `1 / fps`
+    /// seconds between frames. Names that are `nil` pick the first artboard with a state machine and its first one.
+    public static func frames(of data: Data, artboard: String?, stateMachine: String?, size: CGSize, fps: Int, count: Int) async throws -> [CGImage] {
+        let session = try await Session(data: data, size: size) { file in
+            guard let artboard else { return try await makeRive(file: file) }
+            let board = try await file.createArtboard(artboard)
+            var name = stateMachine
+            if name == nil { name = try await board.getStateMachineNames().first }
+            guard let name else { throw OffscreenRenderError.noStateMachine }
+            return try await Rive(file: file, artboard: board, stateMachine: try await board.createStateMachine(name))
+        }
+        let step = 1 / Double(max(fps, 1))
+        var images: [CGImage] = []
+        images.reserveCapacity(max(count, 0))
+        session.rive.stateMachine.advance(by: 0)
+        for index in 0..<max(count, 0) {
+            if index > 0 { session.rive.stateMachine.advance(by: step) }
+            do {
+                images.append(try await session.draw())
+            } catch OffscreenRenderError.drawSkipped where !images.isEmpty {
+                // The renderer skips frames in which nothing changed; the picture is the previous one.
+                images.append(images[images.count - 1])
+            }
+        }
+        return images
+    }
 
-        let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm, width: width, height: height, mipmapped: false)
-        descriptor.usage = [.renderTarget, .shaderRead]
-        descriptor.storageMode = .shared
-        guard let texture = device.makeTexture(descriptor: descriptor) else { throw OffscreenRenderError.textureCreationFailed }
+    /// One loaded file, one render target and one renderer, reused for every frame.
+    @MainActor
+    private final class Session {
+        let rive: Rive
+        private let device: any MTLDevice
+        private let texture: any MTLTexture
+        private let renderer: any RiveUIRendererProtocol
+        private let configuration: RiveUIRendererConfiguration
+        private let width: Int
+        private let height: Int
 
-        var configuration = RiveUIRendererConfiguration(rive: rive, drawableSize: CGSize(width: width, height: height))
-        configuration.pixelFormat = .bgra8Unorm
+        init(data: Data, size: CGSize, makeRive: @MainActor (File) async throws -> Rive) async throws {
+            guard let device = MTLCreateSystemDefaultDevice() else { throw OffscreenRenderError.noMetalDevice }
+            width = max(Int(size.width.rounded()), 1)
+            height = max(Int(size.height.rounded()), 1)
+            let worker = Worker(device: device)
+            let file = try await File(source: .data(data), worker: worker)
+            rive = try await makeRive(file)
 
-        let renderer = rive.makeRenderer()
-        let gate = ResumeGate()
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
-            renderer.draw(configuration, to: texture, from: device, onDraw: { @Sendable commandBuffer in
-                commandBuffer.addCompletedHandler { @Sendable _ in gate.resume(continuation, with: nil) }
-            }, onSkipped: { @Sendable in
-                gate.resume(continuation, with: OffscreenRenderError.drawSkipped)
-            }, onError: { @Sendable error in
-                gate.resume(continuation, with: error)
-            })
+            let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm, width: width, height: height, mipmapped: false)
+            descriptor.usage = [.renderTarget, .shaderRead]
+            descriptor.storageMode = .shared
+            guard let texture = device.makeTexture(descriptor: descriptor) else { throw OffscreenRenderError.textureCreationFailed }
+            var configuration = RiveUIRendererConfiguration(rive: rive, drawableSize: CGSize(width: width, height: height))
+            configuration.pixelFormat = .bgra8Unorm
+            self.device = device
+            self.texture = texture
+            self.configuration = configuration
+            self.renderer = rive.makeRenderer()
         }
 
-        var bytes = [UInt8](repeating: 0, count: width * height * 4)
-        texture.getBytes(&bytes, bytesPerRow: width * 4, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
-        guard let provider = CGDataProvider(data: Data(bytes) as CFData),
-              let image = CGImage(
-                width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: width * 4,
-                space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo, provider: provider,
-                decode: nil, shouldInterpolate: true, intent: .defaultIntent
-              )
-        else { throw OffscreenRenderError.imageCreationFailed }
-        return image
+        func draw() async throws -> CGImage {
+            let gate = ResumeGate()
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+                renderer.draw(configuration, to: texture, from: device, onDraw: { @Sendable commandBuffer in
+                    commandBuffer.addCompletedHandler { @Sendable _ in gate.resume(continuation, with: nil) }
+                }, onSkipped: { @Sendable in
+                    gate.resume(continuation, with: OffscreenRenderError.drawSkipped)
+                }, onError: { @Sendable error in
+                    gate.resume(continuation, with: error)
+                })
+            }
+            var bytes = [UInt8](repeating: 0, count: width * height * 4)
+            texture.getBytes(&bytes, bytesPerRow: width * 4, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)
+            let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+            guard let provider = CGDataProvider(data: Data(bytes) as CFData),
+                  let image = CGImage(
+                    width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: width * 4,
+                    space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo, provider: provider,
+                    decode: nil, shouldInterpolate: true, intent: .defaultIntent
+                  )
+            else { throw OffscreenRenderError.imageCreationFailed }
+            return image
+        }
     }
 
     private static func makeRive(file: File) async throws -> Rive {

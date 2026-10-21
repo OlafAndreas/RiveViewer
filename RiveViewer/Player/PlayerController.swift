@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 import Observation
 import OSLog
@@ -78,6 +79,9 @@ final class PlayerController {
     }
 
     @ObservationIgnored private var file: RiveFile?
+    @ObservationIgnored private var fileData: Data?
+    /// Drives the Export GIF sheet.
+    var isShowingGIFExport = false
     @ObservationIgnored private var userPaused = false
 
     private static let maxLogEntries = 500
@@ -111,6 +115,7 @@ final class PlayerController {
             let file = try RiveFileLoader.load(data: data)
             let summary = RiveFileInspector.summarize(file)
             self.file = file
+            self.fileData = data
             self.summary = summary
             self.loadError = nil
             parseContainer(data)
@@ -401,6 +406,27 @@ final class PlayerController {
 
     func clearEvents() {
         eventLog.removeAll()
+    }
+
+    // MARK: GIF export
+
+    /// The offscreen renderer drives state machines only, so timeline-animation selections cannot be exported.
+    var canExportGIF: Bool { selection?.isStateMachine == true && fileData != nil }
+
+    /// Renders the current artboard and state machine from its initial state and writes a looping GIF to `url`.
+    /// A non-nil `background` flattens every frame onto that colour.
+    func exportGIF(settings: GifExportSettings, background: CGColor?, to url: URL) async throws {
+        guard let fileData, case .stateMachine(let artboard, let stateMachine) = selection, let summary = currentArtboard else { return }
+        let size = settings.outputSize(artboardWidth: summary.width, artboardHeight: summary.height)
+        var frames = try await OffscreenRenderer.frames(
+            of: fileData, artboard: artboard, stateMachine: stateMachine,
+            size: size, fps: settings.fps, count: settings.frameCount
+        )
+        if let background {
+            frames = frames.compactMap { GifEncoder.flatten($0, over: background) }
+        }
+        try GifEncoder.write(frames, fps: settings.fps, to: url)
+        log.notice("exported gif \(url.lastPathComponent, privacy: .public): frames=\(frames.count) size=\(Int(size.width))x\(Int(size.height))")
     }
 
     // MARK: Text runs

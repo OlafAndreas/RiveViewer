@@ -25,6 +25,9 @@ struct DocumentView: View {
                 .help("Show or hide the inspector")
             }
         }
+        .sheet(isPresented: $controller.isShowingGIFExport) {
+            GIFExportSheet(controller: controller)
+        }
         .focusedSceneValue(\.playerController, controller)
     }
 

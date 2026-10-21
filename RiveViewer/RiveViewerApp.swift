@@ -54,6 +54,11 @@ struct PlayerCommands: Commands {
                 .keyboardShortcut("r")
                 .disabled(controller == nil)
         }
+        CommandGroup(after: .saveItem) {
+            Button("Export GIF…") { controller?.isShowingGIFExport = true }
+                .keyboardShortcut("e", modifiers: [.command, .shift])
+                .disabled(controller?.canExportGIF != true)
+        }
         CommandMenu("Playback") {
             Button(controller?.isPlaying == true ? "Pause" : "Play") { controller?.togglePlay() }
                 .keyboardShortcut(.space, modifiers: [])
