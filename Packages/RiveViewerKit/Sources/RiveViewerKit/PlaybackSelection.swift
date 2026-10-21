@@ -22,6 +22,14 @@ public enum PlaybackSelection: Sendable, Hashable {
         return false
     }
 
+    /// Compact form for log lines, e.g. `animation(Square/rollaround)`.
+    public var logDescription: String {
+        switch self {
+        case .stateMachine(let artboard, let name): return "stateMachine(\(artboard)/\(name))"
+        case .animation(let artboard, let name): return "animation(\(artboard)/\(name))"
+        }
+    }
+
     public func exists(in summary: RiveFileSummary) -> Bool {
         guard let artboard = summary.artboard(named: artboardName) else { return false }
         switch self {

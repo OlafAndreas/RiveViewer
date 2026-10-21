@@ -1,9 +1,13 @@
-PROJECT   := RiveViewer.xcodeproj
-SCHEME    := RiveViewer
-DERIVED   := build
-KIT       := Packages/RiveViewerKit
+PROJECT    := RiveViewer.xcodeproj
+SCHEME     := RiveViewer
+DERIVED    := build
+KIT        := Packages/RiveViewerKit
+APP_NAME   := RiveViewer.app
+INSTALL_DIR := $(HOME)/Applications
+LSREGISTER := /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister
+XCODEBUILD := xcodebuild -project $(PROJECT) -scheme $(SCHEME) -derivedDataPath $(DERIVED) -quiet
 
-.PHONY: project test build release install preview clean
+.PHONY: project test build release install register preview clean
 
 project:
 	xcodegen generate
@@ -12,16 +16,29 @@ test:
 	cd $(KIT) && swift test
 
 build: project
-	@echo "make build is defined in Task 4"
+	$(XCODEBUILD) -configuration Debug build
 
 release: project
-	@echo "make release is defined in Task 4"
+	$(XCODEBUILD) -configuration Release build
 
-install:
-	@echo "make install is defined in Task 4"
+# Copies the Release build to ~/Applications and tells LaunchServices, PlugInKit and Quick Look about it.
+install: release
+	rm -rf "$(INSTALL_DIR)/$(APP_NAME)"
+	mkdir -p "$(INSTALL_DIR)"
+	cp -R "$(DERIVED)/Build/Products/Release/$(APP_NAME)" "$(INSTALL_DIR)/"
+	$(MAKE) register APP="$(INSTALL_DIR)/$(APP_NAME)"
 
+# Registers an app bundle (default: the Debug build) so Quick Look picks up its extension.
+APP ?= $(DERIVED)/Build/Products/Debug/$(APP_NAME)
+register:
+	$(LSREGISTER) -f "$(APP)"
+	pluginkit -a "$(APP)/Contents/PlugIns/RiveQuickLook.appex"
+	qlmanage -r
+	qlmanage -r cache
+
+# Opens a Quick Look panel for FILE using the registered extension.
 preview:
-	@echo "make preview FILE=path.riv is defined in Task 4"
+	qlmanage -p "$(FILE)"
 
 clean:
 	rm -rf $(DERIVED) $(KIT)/.build

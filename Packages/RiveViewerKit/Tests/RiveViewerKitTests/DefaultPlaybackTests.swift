@@ -48,3 +48,10 @@ struct DefaultPlaybackTests {
         #expect(DefaultPlayback.reconcile(nil, in: s) == .animation(artboard: "Square", name: "rollaround"))
     }
 }
+
+struct PlaybackSelectionDescriptionTests {
+    @Test func logDescriptions() {
+        #expect(PlaybackSelection.animation(artboard: "Square", name: "rollaround").logDescription == "animation(Square/rollaround)")
+        #expect(PlaybackSelection.stateMachine(artboard: "New Artboard", name: "State Machine 1").logDescription == "stateMachine(New Artboard/State Machine 1)")
+    }
+}

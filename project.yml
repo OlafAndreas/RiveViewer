@@ -1,0 +1,75 @@
+name: RiveViewer
+options:
+  bundleIdPrefix: no.olafandreas
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+packages:
+  RiveViewerKit:
+    path: Packages/RiveViewerKit
+  RiveRuntime:
+    url: https://github.com/rive-app/rive-ios
+    exactVersion: 6.28.1
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    # Ad-hoc "sign to run locally". To sign with your team instead, set
+    # CODE_SIGN_STYLE: Automatic, CODE_SIGN_IDENTITY: "Apple Development" and
+    # DEVELOPMENT_TEAM: J69ZPVRMCE
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+targets:
+  RiveViewer:
+    type: application
+    platform: macOS
+    sources:
+      - RiveViewer
+    info:
+      path: RiveViewer/Info.plist
+      properties:
+        CFBundleDisplayName: RiveViewer
+        LSApplicationCategoryType: public.app-category.developer-tools
+        NSHumanReadableCopyright: ""
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Rive Animation
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [app.rive.riv]
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: app.rive.riv
+            UTTypeDescription: Rive Animation
+            UTTypeConformsTo: [public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [riv]
+    dependencies:
+      - package: RiveViewerKit
+      - package: RiveRuntime
+      - target: RiveQuickLook
+  RiveQuickLook:
+    type: app-extension
+    platform: macOS
+    sources:
+      - RiveQuickLook
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: no.olafandreas.RiveViewer.QuickLook
+    info:
+      path: RiveQuickLook/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionAttributes:
+            QLSupportedContentTypes: [app.rive.riv]
+            QLSupportsSearchableItems: false
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PreviewViewController
+    entitlements:
+      path: RiveQuickLook/RiveQuickLook.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true
+    dependencies:
+      - package: RiveViewerKit
+      - package: RiveRuntime
