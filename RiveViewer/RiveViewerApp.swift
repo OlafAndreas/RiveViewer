@@ -61,6 +61,13 @@ struct PlayerCommands: Commands {
             Button("Restart") { controller?.restart() }
                 .keyboardShortcut("0")
                 .disabled(controller?.viewModel == nil)
+            Divider()
+            Button("Step Backward") { controller?.step(frames: -1) }
+                .keyboardShortcut(.leftArrow, modifiers: .option)
+                .disabled(controller?.currentAnimation == nil)
+            Button("Step Forward") { controller?.step(frames: 1) }
+                .keyboardShortcut(.rightArrow, modifiers: .option)
+                .disabled(controller?.currentAnimation == nil)
         }
     }
 }

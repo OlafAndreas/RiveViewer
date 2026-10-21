@@ -30,6 +30,29 @@ final class PlayerController {
         }
     }
 
+    // MARK: View options
+
+    var loopMode: LoopMode = .loop {
+        didSet { applyLoopMode() }
+    }
+
+    var fit: RiveFit = .contain {
+        didSet { viewModel?.fit = fit }
+    }
+
+    var alignment: RiveAlignment = .center {
+        didSet { viewModel?.alignment = alignment }
+    }
+
+    var background: CanvasBackground = .checkerboard
+
+    var showsFPS = false {
+        didSet {
+            RiveView.showFPSCounters = showsFPS
+            viewModel?.riveView?.showFPS = showsFPS
+        }
+    }
+
     @ObservationIgnored private var file: RiveFile?
     @ObservationIgnored private var userPaused = false
 
@@ -45,6 +68,16 @@ final class PlayerController {
     var currentArtboard: ArtboardSummary? {
         guard let selection, let summary else { return nil }
         return summary.artboard(named: selection.artboardName)
+    }
+
+    var currentAnimation: AnimationSummary? {
+        guard case .animation(_, let name) = selection else { return nil }
+        return currentArtboard?.animation(named: name)
+    }
+
+    var currentStateMachine: StateMachineSummary? {
+        guard case .stateMachine(_, let name) = selection else { return nil }
+        return currentArtboard?.stateMachine(named: name)
     }
 
     // MARK: Loading
@@ -102,14 +135,17 @@ final class PlayerController {
             let viewModel: InspectorRiveViewModel
             switch selection {
             case .stateMachine(_, let name):
-                viewModel = InspectorRiveViewModel(model, stateMachineName: name, autoPlay: true)
+                viewModel = InspectorRiveViewModel(model, stateMachineName: name, fit: fit, alignment: alignment, autoPlay: true)
             case .animation(_, let name):
-                viewModel = InspectorRiveViewModel(model, animationName: name, autoPlay: true)
+                viewModel = InspectorRiveViewModel(model, animationName: name, fit: fit, alignment: alignment, autoPlay: true)
             }
             wire(viewModel)
             self.viewModel = viewModel
             isPlaying = true
             loadError = nil
+            if let animation = currentAnimation {
+                loopMode = animation.loop
+            }
         } catch {
             fail(error)
         }
@@ -160,6 +196,10 @@ final class PlayerController {
         }
     }
 
+    private func applyLoopMode() {
+        viewModel?.riveModel?.animation?.loop(Int32(loopMode.rawValue))
+    }
+
     // MARK: Transport
 
     func play() {
@@ -181,12 +221,28 @@ final class PlayerController {
     func restart() {
         userPaused = false
         viewModel?.reset()
+        applyLoopMode()
         viewModel?.play()
         currentTime = 0
         elapsed = 0
         isSettled = false
         isPlaying = true
         append(.playback("Restart"))
+    }
+
+    /// Moves an animation to `time` and redraws, without changing the play state.
+    func seek(to time: Double) {
+        guard let viewModel, let animation = viewModel.riveModel?.animation else { return }
+        animation.setTime(Float(time))
+        viewModel.riveView?.advance(delta: 0)
+        currentTime = time
+    }
+
+    /// Pauses and moves an animation by whole frames, clamped to its playable range.
+    func step(frames: Int) {
+        guard let animation = currentAnimation else { return }
+        pause()
+        seek(to: FrameStepper.step(time: currentTime, fps: animation.fps, by: frames, within: animation.timeRange))
     }
 
     func clearEvents() {
