@@ -52,6 +52,9 @@ targets:
       - package: RiveRuntime
       - target: RiveQuickLook
       - target: RiveThumbnail
+    scheme:
+      testTargets:
+        - package: RiveViewerKit/RiveViewerKitTests
   RiveQuickLook:
     type: app-extension
     platform: macOS

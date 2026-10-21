@@ -44,7 +44,7 @@ make install   # builds Release, copies to ~/Applications and registers the Quic
 
 | Command | What it does |
 | --- | --- |
-| `make project` | Generates `RiveViewer.xcodeproj` from `project.yml` (the project file is not committed). |
+| `make project` | Regenerates `RiveViewer.xcodeproj` from `project.yml`. The project file is committed (Xcode Cloud builds it), so after editing `project.yml` run this and commit both. |
 | `make build` | Debug build of the app and both extensions into `./build`. |
 | `make test` | Runs the `RiveViewerKit` unit tests with `swift test`. |
 | `make install` | Release build, copies `RiveViewer.app` to `~/Applications` and registers it with LaunchServices, PlugInKit and Quick Look. |

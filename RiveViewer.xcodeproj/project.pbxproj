@@ -1,0 +1,756 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02595A344A4D38E7275FA7E5 /* InputsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275078711471DE84871A7CCC /* InputsSection.swift */; };
+		0556D0E9581D529A238179A0 /* TextRunsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C7995F63FD96CE2F11BEC7 /* TextRunsSection.swift */; };
+		0A1F994ADEEA6F60E5BADD19 /* LiveInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E02BD843209E0ACAEE10436 /* LiveInput.swift */; };
+		0B01A05FF4BF4C7645911337 /* FileOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918A3D0E9893F0045E34E452 /* FileOutlineView.swift */; };
+		20BD5758D4333B8E22E80C83 /* RiveViewerKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6B0C9122FF35288AA8A45D95 /* RiveViewerKit */; };
+		2192125193205BAE2D749C3E /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 509AB53BCB4C0C65685E10F3 /* RiveRuntime */; };
+		374B824E2EAE9E00196A9136 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD45B8DAA9CC5DECF64838 /* ErrorView.swift */; };
+		3D682C2364B4A62B6C942568 /* InspectorRiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B2D5EF34D29C8A35B153E5 /* InspectorRiveViewModel.swift */; };
+		5049D3C20E4CAA57A0BDACED /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F743EE54E9ABA9E29058824 /* PlayerController.swift */; };
+		52A0E7D0E3EE7FADB35FD4BA /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = B3A36CC96DC7983738328506 /* RiveRuntime */; };
+		5E44971A0EB8BA565837498F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D288ECAA1A13D94FC485B508 /* Assets.xcassets */; };
+		65011610AE9D4A26F1FD7F91 /* RiveViewerKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9071443B65A020F9B6C60A44 /* RiveViewerKit */; };
+		6CB6548B055D62D6FF401EB8 /* RiveThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5B136409912B593C1DDD65FE /* RiveThumbnail.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6E6DDA103191A30E08D5DF23 /* RiveViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05193B83904B3889618117C /* RiveViewerApp.swift */; };
+		74A1B3A11A8ACAC940AEC57E /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0655D05978A387274D9C7E /* PreviewViewController.swift */; };
+		766227A760DE21DEB369F562 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B365B51697DBC5F91228F27C /* CanvasView.swift */; };
+		76B270F197B7FBE63B601FBC /* DataBindingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9302103DB9F33BCB864BBCD4 /* DataBindingSection.swift */; };
+		82D93C2044925B2C7473C2EF /* DocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579662F5E6EBB3A49E201977 /* DocumentView.swift */; };
+		8A6DB51A9B6BFB03EBEECA6B /* GIFExportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893EE0B65514668E45B811CE /* GIFExportSheet.swift */; };
+		8EF35D8A420F6F95C47F5628 /* NumberHistoryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C8AA8A94536E567BBBB152 /* NumberHistoryChart.swift */; };
+		95C63FDCB47F4AB7FDD476DE /* RiveViewerKit in Frameworks */ = {isa = PBXBuildFile; productRef = D5D46065B92D6891ACB26829 /* RiveViewerKit */; };
+		99F120471B4BD6C31DF41E0E /* ObjectsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0530E60D733E61EC0EDF6C1B /* ObjectsSection.swift */; };
+		9AE748A961022064FD8CABF4 /* TextRunLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4991E4834A31B5B413E8D6CB /* TextRunLookup.swift */; };
+		A568F82E9BC1F53C06538F6F /* ThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DABC1E6FC94F054060BEEB6 /* ThumbnailProvider.swift */; };
+		ADC28C866CCB72FD7AF5F7C1 /* SelectionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172D6BA979A0285C8FB020F4 /* SelectionSection.swift */; };
+		B7438F3210335B857C2178AE /* CanvasToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C7F5654FFE63AD601B35D5 /* CanvasToolbar.swift */; };
+		B85B59C2E11D21A7631DC5C7 /* CheckerboardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8426C7A5C22F3D0E1967B06D /* CheckerboardBackground.swift */; };
+		BADCEEDB5936F52702B270C6 /* RiveQuickLook.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EC8B166CDDE37CF7F6684A4C /* RiveQuickLook.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BB26E46D58E25F7A1B997420 /* EventsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64A7211360EFE87FA947694 /* EventsSection.swift */; };
+		BFCBAC3A773CFD7C5C681716 /* DataBindingNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C86D575BEA0EC35FA2BFB64 /* DataBindingNode.swift */; };
+		D5E8EC2EB2F508D19E1200AE /* InspectorPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E38511B7F26FB86048AE353 /* InspectorPane.swift */; };
+		DA5CD13C290E98462DE40BD4 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D7F67511858F1BD55EC79909 /* RiveRuntime */; };
+		F2A1812715051CFB95E232FE /* TransportBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505F205F55497A08CB1C0719 /* TransportBar.swift */; };
+		F45CADA432FA155A063634BC /* UTType+Rive.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56DB47817E301363DB6BD86 /* UTType+Rive.swift */; };
+		FA32976CB959CEEDF0FA168A /* RiveDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7642E935B6F7EB1B618DAFA1 /* RiveDocument.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		57A2E1C8FDCBEA5ACA49E7AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2FB5427A628C6E6A63267E8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 55C11266D1D43D3C7C856A80;
+			remoteInfo = RiveThumbnail;
+		};
+		6281FFF6896C1A6735F3BF97 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2FB5427A628C6E6A63267E8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8F7709BA169DB783DCE7AA96;
+			remoteInfo = RiveQuickLook;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D13252E9F1285941D23EEDA6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BADCEEDB5936F52702B270C6 /* RiveQuickLook.appex in Embed Foundation Extensions */,
+				6CB6548B055D62D6FF401EB8 /* RiveThumbnail.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0530E60D733E61EC0EDF6C1B /* ObjectsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectsSection.swift; sourceTree = "<group>"; };
+		0A0655D05978A387274D9C7E /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		0C9B0F63091FE95D88661B5B /* RiveViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RiveViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		172D6BA979A0285C8FB020F4 /* SelectionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionSection.swift; sourceTree = "<group>"; };
+		17C7F5654FFE63AD601B35D5 /* CanvasToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasToolbar.swift; sourceTree = "<group>"; };
+		1E38511B7F26FB86048AE353 /* InspectorPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorPane.swift; sourceTree = "<group>"; };
+		275078711471DE84871A7CCC /* InputsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputsSection.swift; sourceTree = "<group>"; };
+		2E02BD843209E0ACAEE10436 /* LiveInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveInput.swift; sourceTree = "<group>"; };
+		32ED1227ABC8FB4D477DDB89 /* RiveThumbnail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RiveThumbnail.entitlements; sourceTree = "<group>"; };
+		3C86D575BEA0EC35FA2BFB64 /* DataBindingNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBindingNode.swift; sourceTree = "<group>"; };
+		4991E4834A31B5B413E8D6CB /* TextRunLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRunLookup.swift; sourceTree = "<group>"; };
+		505F205F55497A08CB1C0719 /* TransportBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportBar.swift; sourceTree = "<group>"; };
+		55BD45B8DAA9CC5DECF64838 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		579662F5E6EBB3A49E201977 /* DocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentView.swift; sourceTree = "<group>"; };
+		59C8AA8A94536E567BBBB152 /* NumberHistoryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberHistoryChart.swift; sourceTree = "<group>"; };
+		5B136409912B593C1DDD65FE /* RiveThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RiveThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		628E438B36FDDA8A3F8CE040 /* RiveViewerKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RiveViewerKit; path = Packages/RiveViewerKit; sourceTree = SOURCE_ROOT; };
+		66B5BC231DC029911C48A907 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		74B2D5EF34D29C8A35B153E5 /* InspectorRiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorRiveViewModel.swift; sourceTree = "<group>"; };
+		7642E935B6F7EB1B618DAFA1 /* RiveDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveDocument.swift; sourceTree = "<group>"; };
+		8426C7A5C22F3D0E1967B06D /* CheckerboardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckerboardBackground.swift; sourceTree = "<group>"; };
+		893EE0B65514668E45B811CE /* GIFExportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFExportSheet.swift; sourceTree = "<group>"; };
+		8F743EE54E9ABA9E29058824 /* PlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
+		918A3D0E9893F0045E34E452 /* FileOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileOutlineView.swift; sourceTree = "<group>"; };
+		9302103DB9F33BCB864BBCD4 /* DataBindingSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBindingSection.swift; sourceTree = "<group>"; };
+		9DABC1E6FC94F054060BEEB6 /* ThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailProvider.swift; sourceTree = "<group>"; };
+		A4FD82159690A83FF0CC8EB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B05193B83904B3889618117C /* RiveViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveViewerApp.swift; sourceTree = "<group>"; };
+		B365B51697DBC5F91228F27C /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		B56DB47817E301363DB6BD86 /* UTType+Rive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UTType+Rive.swift"; sourceTree = "<group>"; };
+		C9403E5F7857B4B26D807465 /* RiveQuickLook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RiveQuickLook.entitlements; sourceTree = "<group>"; };
+		D288ECAA1A13D94FC485B508 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D7C7995F63FD96CE2F11BEC7 /* TextRunsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRunsSection.swift; sourceTree = "<group>"; };
+		E2E255293D78F81583E67E81 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E64A7211360EFE87FA947694 /* EventsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsSection.swift; sourceTree = "<group>"; };
+		EC8B166CDDE37CF7F6684A4C /* RiveQuickLook.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RiveQuickLook.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7625B7CD3CACDFE4B0DB0E6C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95C63FDCB47F4AB7FDD476DE /* RiveViewerKit in Frameworks */,
+				52A0E7D0E3EE7FADB35FD4BA /* RiveRuntime in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0B69BFDFAC7BD92CBCC806C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				65011610AE9D4A26F1FD7F91 /* RiveViewerKit in Frameworks */,
+				2192125193205BAE2D749C3E /* RiveRuntime in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CCAB8C30C8F39AE1E1F994CA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20BD5758D4333B8E22E80C83 /* RiveViewerKit in Frameworks */,
+				DA5CD13C290E98462DE40BD4 /* RiveRuntime in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		06677A541695175734BE2A99 /* RiveQuickLook */ = {
+			isa = PBXGroup;
+			children = (
+				A4FD82159690A83FF0CC8EB0 /* Info.plist */,
+				0A0655D05978A387274D9C7E /* PreviewViewController.swift */,
+				C9403E5F7857B4B26D807465 /* RiveQuickLook.entitlements */,
+			);
+			path = RiveQuickLook;
+			sourceTree = "<group>";
+		};
+		2F2EA53C06E206A571DD38FD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EC8B166CDDE37CF7F6684A4C /* RiveQuickLook.appex */,
+				5B136409912B593C1DDD65FE /* RiveThumbnail.appex */,
+				0C9B0F63091FE95D88661B5B /* RiveViewer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		40A5FFE149D0FAB79F03CCBA = {
+			isa = PBXGroup;
+			children = (
+				EA0399E20349FB4254B9BA3B /* Packages */,
+				06677A541695175734BE2A99 /* RiveQuickLook */,
+				DE446DF01DBE5BB38F167224 /* RiveThumbnail */,
+				417A08DEA0DBC2D338C6497A /* RiveViewer */,
+				2F2EA53C06E206A571DD38FD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		417A08DEA0DBC2D338C6497A /* RiveViewer */ = {
+			isa = PBXGroup;
+			children = (
+				D288ECAA1A13D94FC485B508 /* Assets.xcassets */,
+				66B5BC231DC029911C48A907 /* Info.plist */,
+				7642E935B6F7EB1B618DAFA1 /* RiveDocument.swift */,
+				B05193B83904B3889618117C /* RiveViewerApp.swift */,
+				B56DB47817E301363DB6BD86 /* UTType+Rive.swift */,
+				F2F3E5240DFAD0AE1340EE2F /* Player */,
+				CD39BB4BBA06FA0BEF734A0E /* Views */,
+			);
+			path = RiveViewer;
+			sourceTree = "<group>";
+		};
+		68ABEFEF1AA082E25FF45254 /* Inspector */ = {
+			isa = PBXGroup;
+			children = (
+				9302103DB9F33BCB864BBCD4 /* DataBindingSection.swift */,
+				E64A7211360EFE87FA947694 /* EventsSection.swift */,
+				275078711471DE84871A7CCC /* InputsSection.swift */,
+				1E38511B7F26FB86048AE353 /* InspectorPane.swift */,
+				59C8AA8A94536E567BBBB152 /* NumberHistoryChart.swift */,
+				0530E60D733E61EC0EDF6C1B /* ObjectsSection.swift */,
+				172D6BA979A0285C8FB020F4 /* SelectionSection.swift */,
+				D7C7995F63FD96CE2F11BEC7 /* TextRunsSection.swift */,
+			);
+			path = Inspector;
+			sourceTree = "<group>";
+		};
+		CD39BB4BBA06FA0BEF734A0E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				17C7F5654FFE63AD601B35D5 /* CanvasToolbar.swift */,
+				B365B51697DBC5F91228F27C /* CanvasView.swift */,
+				8426C7A5C22F3D0E1967B06D /* CheckerboardBackground.swift */,
+				579662F5E6EBB3A49E201977 /* DocumentView.swift */,
+				55BD45B8DAA9CC5DECF64838 /* ErrorView.swift */,
+				918A3D0E9893F0045E34E452 /* FileOutlineView.swift */,
+				893EE0B65514668E45B811CE /* GIFExportSheet.swift */,
+				505F205F55497A08CB1C0719 /* TransportBar.swift */,
+				68ABEFEF1AA082E25FF45254 /* Inspector */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DE446DF01DBE5BB38F167224 /* RiveThumbnail */ = {
+			isa = PBXGroup;
+			children = (
+				E2E255293D78F81583E67E81 /* Info.plist */,
+				32ED1227ABC8FB4D477DDB89 /* RiveThumbnail.entitlements */,
+				9DABC1E6FC94F054060BEEB6 /* ThumbnailProvider.swift */,
+			);
+			path = RiveThumbnail;
+			sourceTree = "<group>";
+		};
+		EA0399E20349FB4254B9BA3B /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				628E438B36FDDA8A3F8CE040 /* RiveViewerKit */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		F2F3E5240DFAD0AE1340EE2F /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				3C86D575BEA0EC35FA2BFB64 /* DataBindingNode.swift */,
+				74B2D5EF34D29C8A35B153E5 /* InspectorRiveViewModel.swift */,
+				2E02BD843209E0ACAEE10436 /* LiveInput.swift */,
+				8F743EE54E9ABA9E29058824 /* PlayerController.swift */,
+				4991E4834A31B5B413E8D6CB /* TextRunLookup.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		55C11266D1D43D3C7C856A80 /* RiveThumbnail */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 46EA5C0B9205F0D8BC0720F6 /* Build configuration list for PBXNativeTarget "RiveThumbnail" */;
+			buildPhases = (
+				DC02407B90E65DA085B71C33 /* Sources */,
+				CCAB8C30C8F39AE1E1F994CA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RiveThumbnail;
+			packageProductDependencies = (
+				6B0C9122FF35288AA8A45D95 /* RiveViewerKit */,
+				D7F67511858F1BD55EC79909 /* RiveRuntime */,
+			);
+			productName = RiveThumbnail;
+			productReference = 5B136409912B593C1DDD65FE /* RiveThumbnail.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		8142DC0EF46ED93607F2EF16 /* RiveViewer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D973E1B071A37FA78487F22 /* Build configuration list for PBXNativeTarget "RiveViewer" */;
+			buildPhases = (
+				C9B200DC03350F4C7A2554AC /* Sources */,
+				C74663CABCD41E23C746C483 /* Resources */,
+				7625B7CD3CACDFE4B0DB0E6C /* Frameworks */,
+				D13252E9F1285941D23EEDA6 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				552418C578BAEF910616C32B /* PBXTargetDependency */,
+				63F7EB182D8E625A994A540B /* PBXTargetDependency */,
+			);
+			name = RiveViewer;
+			packageProductDependencies = (
+				D5D46065B92D6891ACB26829 /* RiveViewerKit */,
+				B3A36CC96DC7983738328506 /* RiveRuntime */,
+			);
+			productName = RiveViewer;
+			productReference = 0C9B0F63091FE95D88661B5B /* RiveViewer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8F7709BA169DB783DCE7AA96 /* RiveQuickLook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6303D0D9B63A16548DA0191A /* Build configuration list for PBXNativeTarget "RiveQuickLook" */;
+			buildPhases = (
+				FA7462CB8663AA45875F94FD /* Sources */,
+				A0B69BFDFAC7BD92CBCC806C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RiveQuickLook;
+			packageProductDependencies = (
+				9071443B65A020F9B6C60A44 /* RiveViewerKit */,
+				509AB53BCB4C0C65685E10F3 /* RiveRuntime */,
+			);
+			productName = RiveQuickLook;
+			productReference = EC8B166CDDE37CF7F6684A4C /* RiveQuickLook.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2FB5427A628C6E6A63267E8A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					55C11266D1D43D3C7C856A80 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+					8142DC0EF46ED93607F2EF16 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+					8F7709BA169DB783DCE7AA96 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 12CFD4A4BAAF02C2E36C1BC1 /* Build configuration list for PBXProject "RiveViewer" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 40A5FFE149D0FAB79F03CCBA;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9C53C54D381CD8E36C83330B /* XCRemoteSwiftPackageReference "rive-ios" */,
+				A3682DA6FAB554B2B45DD2CA /* XCLocalSwiftPackageReference "Packages/RiveViewerKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2F2EA53C06E206A571DD38FD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8142DC0EF46ED93607F2EF16 /* RiveViewer */,
+				8F7709BA169DB783DCE7AA96 /* RiveQuickLook */,
+				55C11266D1D43D3C7C856A80 /* RiveThumbnail */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C74663CABCD41E23C746C483 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5E44971A0EB8BA565837498F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C9B200DC03350F4C7A2554AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B7438F3210335B857C2178AE /* CanvasToolbar.swift in Sources */,
+				766227A760DE21DEB369F562 /* CanvasView.swift in Sources */,
+				B85B59C2E11D21A7631DC5C7 /* CheckerboardBackground.swift in Sources */,
+				BFCBAC3A773CFD7C5C681716 /* DataBindingNode.swift in Sources */,
+				76B270F197B7FBE63B601FBC /* DataBindingSection.swift in Sources */,
+				82D93C2044925B2C7473C2EF /* DocumentView.swift in Sources */,
+				374B824E2EAE9E00196A9136 /* ErrorView.swift in Sources */,
+				BB26E46D58E25F7A1B997420 /* EventsSection.swift in Sources */,
+				0B01A05FF4BF4C7645911337 /* FileOutlineView.swift in Sources */,
+				8A6DB51A9B6BFB03EBEECA6B /* GIFExportSheet.swift in Sources */,
+				02595A344A4D38E7275FA7E5 /* InputsSection.swift in Sources */,
+				D5E8EC2EB2F508D19E1200AE /* InspectorPane.swift in Sources */,
+				3D682C2364B4A62B6C942568 /* InspectorRiveViewModel.swift in Sources */,
+				0A1F994ADEEA6F60E5BADD19 /* LiveInput.swift in Sources */,
+				8EF35D8A420F6F95C47F5628 /* NumberHistoryChart.swift in Sources */,
+				99F120471B4BD6C31DF41E0E /* ObjectsSection.swift in Sources */,
+				5049D3C20E4CAA57A0BDACED /* PlayerController.swift in Sources */,
+				FA32976CB959CEEDF0FA168A /* RiveDocument.swift in Sources */,
+				6E6DDA103191A30E08D5DF23 /* RiveViewerApp.swift in Sources */,
+				ADC28C866CCB72FD7AF5F7C1 /* SelectionSection.swift in Sources */,
+				9AE748A961022064FD8CABF4 /* TextRunLookup.swift in Sources */,
+				0556D0E9581D529A238179A0 /* TextRunsSection.swift in Sources */,
+				F2A1812715051CFB95E232FE /* TransportBar.swift in Sources */,
+				F45CADA432FA155A063634BC /* UTType+Rive.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC02407B90E65DA085B71C33 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A568F82E9BC1F53C06538F6F /* ThumbnailProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA7462CB8663AA45875F94FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74A1B3A11A8ACAC940AEC57E /* PreviewViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		552418C578BAEF910616C32B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8F7709BA169DB783DCE7AA96 /* RiveQuickLook */;
+			targetProxy = 6281FFF6896C1A6735F3BF97 /* PBXContainerItemProxy */;
+		};
+		63F7EB182D8E625A994A540B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 55C11266D1D43D3C7C856A80 /* RiveThumbnail */;
+			targetProxy = 57A2E1C8FDCBEA5ACA49E7AE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		023E892F7DBDD6BDC44EE096 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RiveThumbnail/RiveThumbnail.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RiveThumbnail/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = no.olafandreas.RiveViewer.Thumbnail;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		123AD924EE50920BE771D9CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		32A97ED683AAA4456120313F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RiveQuickLook/RiveQuickLook.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RiveQuickLook/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = no.olafandreas.RiveViewer.QuickLook;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		68276BA7147F86902F6C7CD8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RiveThumbnail/RiveThumbnail.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RiveThumbnail/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = no.olafandreas.RiveViewer.Thumbnail;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		69D318C8DDD93CA0EED4DB75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RiveViewer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = no.olafandreas.RiveViewer;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7B6659E20D4A556E060BBD9E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		8BB73B71E22918CC75999680 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RiveViewer/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = no.olafandreas.RiveViewer;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		B0628E4E7FA8AD7C97167D7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RiveQuickLook/RiveQuickLook.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = RiveQuickLook/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = no.olafandreas.RiveViewer.QuickLook;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0D973E1B071A37FA78487F22 /* Build configuration list for PBXNativeTarget "RiveViewer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8BB73B71E22918CC75999680 /* Debug */,
+				69D318C8DDD93CA0EED4DB75 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		12CFD4A4BAAF02C2E36C1BC1 /* Build configuration list for PBXProject "RiveViewer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B6659E20D4A556E060BBD9E /* Debug */,
+				123AD924EE50920BE771D9CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		46EA5C0B9205F0D8BC0720F6 /* Build configuration list for PBXNativeTarget "RiveThumbnail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				68276BA7147F86902F6C7CD8 /* Debug */,
+				023E892F7DBDD6BDC44EE096 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6303D0D9B63A16548DA0191A /* Build configuration list for PBXNativeTarget "RiveQuickLook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0628E4E7FA8AD7C97167D7C /* Debug */,
+				32A97ED683AAA4456120313F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A3682DA6FAB554B2B45DD2CA /* XCLocalSwiftPackageReference "Packages/RiveViewerKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/RiveViewerKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9C53C54D381CD8E36C83330B /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios";
+			requirement = {
+				kind = exactVersion;
+				version = 6.28.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		509AB53BCB4C0C65685E10F3 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C53C54D381CD8E36C83330B /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
+		};
+		6B0C9122FF35288AA8A45D95 /* RiveViewerKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RiveViewerKit;
+		};
+		9071443B65A020F9B6C60A44 /* RiveViewerKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RiveViewerKit;
+		};
+		B3A36CC96DC7983738328506 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C53C54D381CD8E36C83330B /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
+		};
+		D5D46065B92D6891ACB26829 /* RiveViewerKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RiveViewerKit;
+		};
+		D7F67511858F1BD55EC79909 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C53C54D381CD8E36C83330B /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 2FB5427A628C6E6A63267E8A /* Project object */;
+}
