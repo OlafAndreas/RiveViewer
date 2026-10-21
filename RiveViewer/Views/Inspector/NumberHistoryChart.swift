@@ -12,7 +12,7 @@ struct NumberHistoryChart: View {
         if let timeRange = history.timeRange, let valueRange = history.valueRange {
             let domain = padded(valueRange)
             VStack(alignment: .leading, spacing: 2) {
-                Chart(history.samples, id: \.time) { sample in
+                Chart(history.downsampled(maxPoints: 200), id: \.time) { sample in
                     LineMark(x: .value("Time", sample.time), y: .value("Value", sample.value))
                 }
                 .chartXScale(domain: timeRange)

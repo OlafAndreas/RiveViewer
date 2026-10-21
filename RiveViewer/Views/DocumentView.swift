@@ -12,7 +12,13 @@ struct DocumentView: View {
             detail
         }
         .inspector(isPresented: $showsInspector) {
-            InspectorPane(controller: controller)
+            Group {
+                if controller.loadError == nil {
+                    InspectorPane(controller: controller)
+                } else {
+                    ContentUnavailableView("No file loaded", systemImage: "doc.questionmark")
+                }
+            }
                 .inspectorColumnWidth(min: 280, ideal: 340, max: 520)
         }
         .toolbar {

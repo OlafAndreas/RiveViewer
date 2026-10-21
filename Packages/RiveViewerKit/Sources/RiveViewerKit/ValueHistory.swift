@@ -49,3 +49,30 @@ public struct ValueHistory: Sendable, Equatable {
         return (latest.time - window)...latest.time
     }
 }
+
+extension ValueHistory {
+    /// At most `maxPoints` samples for drawing: the first and last sample, plus the minimum and maximum of each bucket
+    /// in time order, so spikes stay visible.
+    public func downsampled(maxPoints: Int) -> [Sample] {
+        guard samples.count > maxPoints, maxPoints >= 4 else { return samples }
+        let interior = samples[1..<(samples.count - 1)]
+        let bucketCount = (maxPoints - 2) / 2
+        let bucketSize = Int((Double(interior.count) / Double(bucketCount)).rounded(.up))
+        var result: [Sample] = [samples[0]]
+        var start = interior.startIndex
+        while start < interior.endIndex {
+            let end = min(start + bucketSize, interior.endIndex)
+            let bucket = interior[start..<end]
+            if let low = bucket.min(by: { $0.value < $1.value }), let high = bucket.max(by: { $0.value < $1.value }) {
+                if low == high {
+                    result.append(low)
+                } else {
+                    result.append(contentsOf: low.time < high.time ? [low, high] : [high, low])
+                }
+            }
+            start = end
+        }
+        result.append(samples[samples.count - 1])
+        return result
+    }
+}

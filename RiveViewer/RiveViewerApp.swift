@@ -60,8 +60,10 @@ struct PlayerCommands: Commands {
                 .disabled(controller?.canExportGIF != true)
         }
         CommandMenu("Playback") {
+            // Space is handled by the canvas (see CanvasView); a bare-Space key equivalent would swallow spaces typed
+            // into the inspector's text fields.
             Button(controller?.isPlaying == true ? "Pause" : "Play") { controller?.togglePlay() }
-                .keyboardShortcut(.space, modifiers: [])
+                .keyboardShortcut("p", modifiers: [.command, .option])
                 .disabled(controller?.viewModel == nil)
             Button("Restart") { controller?.restart() }
                 .keyboardShortcut("0")

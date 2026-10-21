@@ -40,6 +40,11 @@ final class PlayerController {
     var collapsedHistories: Set<String> = []
     @ObservationIgnored private var numberNodes: [DataBindingNode] = []
     @ObservationIgnored private var didLogHistory = false
+    /// Every-frame samples; copied to the observed `numberHistories` at most 10 times a second.
+    @ObservationIgnored private var historyBuffer: [String: ValueHistory] = [:]
+    @ObservationIgnored private var publishThrottle = PublishThrottle(interval: 0.1)
+    /// Set by bound-property listeners; folded into one `dataBindingRevision` bump per publish.
+    @ObservationIgnored private var bindingChangePending = false
     @ObservationIgnored private var didLogAdvance = false
     private(set) var textRunLookups: [TextRunLookup] = []
     /// Results of parsing the .riv container itself (independent of the runtime).
@@ -169,12 +174,32 @@ final class PlayerController {
         }
     }
 
+    /// Drops everything tied to the running artboard so the inspector never edits a previous file's objects.
+    private func clearPlaybackState() {
+        viewModel = nil
+        isPlaying = false
+        inputs = []
+        boundInstance = nil
+        boundViewModelName = nil
+        dataBindingRoots = []
+        numberNodes = []
+        numberHistories = [:]
+        historyBuffer = [:]
+    }
+
     private func fail(_ error: any Error) {
         let viewerError = (error as? RiveViewerError) ?? .cannotLoad(error.localizedDescription)
         loadError = viewerError
         summary = nil
-        viewModel = nil
         file = nil
+        fileData = nil
+        clearPlaybackState()
+        parseTask?.cancel()
+        rawFile = nil
+        rawFileError = nil
+        textRuns = []
+        objectRoots = []
+        eventLog.removeAll()
         log.error("open failed: \(viewerError.localizedDescription, privacy: .public)")
     }
 
@@ -185,8 +210,7 @@ final class PlayerController {
         isSettled = false
         userPaused = false
         guard let file, let selection else {
-            viewModel = nil
-            isPlaying = false
+            clearPlaybackState()
             return
         }
         do {
@@ -255,12 +279,18 @@ final class PlayerController {
     }
 
     private func sampleHistories() {
-        guard !numberNodes.isEmpty else { return }
         for node in numberNodes {
             guard let value = node.numberProperty?.value else { continue }
-            numberHistories[node.path, default: ValueHistory()].append(time: historyClock, value: Double(value))
+            historyBuffer[node.path, default: ValueHistory()].append(time: historyClock, value: Double(value))
         }
-        if !didLogHistory {
+        if publishThrottle.shouldPublish(at: historyClock) {
+            if !numberNodes.isEmpty { numberHistories = historyBuffer }
+            if bindingChangePending {
+                bindingChangePending = false
+                dataBindingRevision += 1
+            }
+        }
+        if !didLogHistory, !numberNodes.isEmpty {
             didLogHistory = true
             log.notice("history: \(self.numberNodes.count) numeric properties sampled")
         }
@@ -297,9 +327,12 @@ final class PlayerController {
         boundInstance = instance
         boundViewModelName = viewModel.name
         dataBindingRoots = DataBindingNode.nodes(of: instance)
-        dataBindingRoots.forEach { $0.observe { [weak self] in self?.dataBindingRevision += 1 } }
+        dataBindingRoots.forEach { $0.observe { [weak self] in self?.bindingChangePending = true } }
         numberNodes = DataBindingNode.flattened(dataBindingRoots).filter { $0.type == .number }
         numberHistories = [:]
+        historyBuffer = [:]
+        publishThrottle.reset()
+        bindingChangePending = false
         historyClock = 0
         didLogHistory = false
         log.notice("data binding: \(viewModel.name, privacy: .public)/\(instance.name, privacy: .public) properties=\(instance.propertyCount)")

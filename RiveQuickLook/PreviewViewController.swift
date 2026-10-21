@@ -74,12 +74,11 @@ final class PreviewViewController: NSViewController, @preconcurrency QLPreviewin
     func player(pausedWithModel riveModel: RiveModel?) {
         guard !didFallBack,
               let selection, selection.isStateMachine,
-              let summary, let artboard = summary.artboard(named: selection.artboardName),
-              let fallback = DefaultPlayback.fallbackAnimation(for: artboard),
+              let summary, let newSelection = DefaultPlayback.fallbackSelection(after: selection, in: summary),
               let file = model?.riveFile
         else { return }
         didFallBack = true
-        let newSelection = PlaybackSelection.animation(artboard: artboard.name, name: fallback)
+        let fallback = newSelection.itemName
         // Leave the delegate callback before swapping models; setModel restarts the frame loop.
         Task { @MainActor [weak self] in
             guard let self, let riveView = self.riveView else { return }

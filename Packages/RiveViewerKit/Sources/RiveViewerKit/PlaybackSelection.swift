@@ -65,6 +65,18 @@ public enum DefaultPlayback {
         return best?.name
     }
 
+    /// The animation to loop once a state machine settles: the longest one on the same artboard, otherwise the longest
+    /// one on the first artboard that has any; `nil` when the file has no timeline animations.
+    public static func fallbackSelection(after selection: PlaybackSelection, in summary: RiveFileSummary) -> PlaybackSelection? {
+        if let artboard = summary.artboard(named: selection.artboardName), let name = fallbackAnimation(for: artboard) {
+            return .animation(artboard: artboard.name, name: name)
+        }
+        for artboard in summary.artboards {
+            if let name = fallbackAnimation(for: artboard) { return .animation(artboard: artboard.name, name: name) }
+        }
+        return nil
+    }
+
     /// Keeps `selection` when the file still contains it, otherwise picks the default.
     public static func reconcile(_ selection: PlaybackSelection?, in summary: RiveFileSummary) -> PlaybackSelection? {
         if let selection, selection.exists(in: summary) { return selection }

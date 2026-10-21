@@ -55,3 +55,34 @@ struct PlaybackSelectionDescriptionTests {
         #expect(PlaybackSelection.stateMachine(artboard: "New Artboard", name: "State Machine 1").logDescription == "stateMachine(New Artboard/State Machine 1)")
     }
 }
+
+struct FallbackSelectionTests {
+    private func artboard(_ name: String, index: Int, animations: [AnimationSummary], stateMachines: [String] = []) -> ArtboardSummary {
+        ArtboardSummary(index: index, name: name, width: 10, height: 10, defaultStateMachineName: nil, defaultViewModelName: nil,
+                        stateMachines: stateMachines.map { StateMachineSummary(name: $0, layerCount: 1, inputs: []) }, animations: animations)
+    }
+
+    @Test func prefersAnimationOnTheSameArtboard() {
+        let long = AnimationSummary(name: "long", fps: 60, durationFrames: 600, workArea: nil, loop: .loop)
+        let own = AnimationSummary(name: "own", fps: 60, durationFrames: 60, workArea: nil, loop: .loop)
+        let s = RiveFileSummary(runtimeVersion: "7.4", defaultArtboardName: "A", artboards: [
+            artboard("A", index: 0, animations: [long]),
+            artboard("Main", index: 1, animations: [own], stateMachines: ["SM"]),
+        ], viewModels: [])
+        #expect(DefaultPlayback.fallbackSelection(after: .stateMachine(artboard: "Main", name: "SM"), in: s) == .animation(artboard: "Main", name: "own"))
+    }
+
+    @Test func crossesArtboardsWhenTheStateMachineArtboardHasNoTimelines() {
+        let anim = AnimationSummary(name: "Bubble", fps: 60, durationFrames: 120, workArea: nil, loop: .loop)
+        let s = RiveFileSummary(runtimeVersion: "7.4", defaultArtboardName: "Main", artboards: [
+            artboard("Main", index: 0, animations: [], stateMachines: ["SM"]),
+            artboard("Bubble_1", index: 1, animations: [anim]),
+        ], viewModels: [])
+        #expect(DefaultPlayback.fallbackSelection(after: .stateMachine(artboard: "Main", name: "SM"), in: s) == .animation(artboard: "Bubble_1", name: "Bubble"))
+    }
+
+    @Test func noTimelinesAnywhereGivesNil() {
+        let s = RiveFileSummary(runtimeVersion: "7.4", defaultArtboardName: "Main", artboards: [artboard("Main", index: 0, animations: [], stateMachines: ["SM"])], viewModels: [])
+        #expect(DefaultPlayback.fallbackSelection(after: .stateMachine(artboard: "Main", name: "SM"), in: s) == nil)
+    }
+}
