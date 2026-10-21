@@ -10,6 +10,7 @@ struct InspectorPane: View {
             if controller.currentStateMachine != nil {
                 InputsSection(controller: controller)
             }
+            DataBindingSection(controller: controller)
         }
         .formStyle(.grouped)
     }

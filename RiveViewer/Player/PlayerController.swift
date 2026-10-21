@@ -25,6 +25,12 @@ final class PlayerController {
     private(set) var eventLog: [EventLogEntry] = []
     /// Inputs of the running state machine (empty in animation mode).
     private(set) var inputs: [LiveInput] = []
+    /// Default instance of the artboard's default view model, bound to the running artboard and state machine.
+    private(set) var boundInstance: RiveDataBindingViewModel.Instance?
+    private(set) var boundViewModelName: String?
+    private(set) var dataBindingRoots: [DataBindingNode] = []
+    /// Incremented whenever a bound property changes, so views re-read live values.
+    private(set) var dataBindingRevision = 0
 
     var selection: PlaybackSelection? {
         didSet {
@@ -146,6 +152,7 @@ final class PlayerController {
             isPlaying = true
             loadError = nil
             rebuildInputs()
+            bindDataModel()
             log.notice("playing \(selection.logDescription, privacy: .public) on artboard instance \(viewModel.riveModel?.artboard.name() ?? "-", privacy: .public)")
             if let animation = currentAnimation {
                 loopMode = animation.loop
@@ -198,6 +205,37 @@ final class PlayerController {
         if eventLog.count > Self.maxLogEntries {
             eventLog.removeFirst(eventLog.count - Self.maxLogEntries)
         }
+    }
+
+    private func bindDataModel() {
+        boundInstance = nil
+        boundViewModelName = nil
+        dataBindingRoots = []
+        guard let model = viewModel?.riveModel, let artboard = model.artboard else {
+            log.notice("data binding: no model or artboard")
+            return
+        }
+        guard let viewModel = model.riveFile.defaultViewModel(for: artboard) else {
+            log.notice("data binding: no default view model for \(artboard.name(), privacy: .public) (file has \(model.riveFile.viewModelCount) view models)")
+            return
+        }
+        guard let instance = viewModel.createDefaultInstance() else {
+            log.notice("data binding: no default instance for \(viewModel.name, privacy: .public)")
+            return
+        }
+        model.stateMachine?.bind(viewModelInstance: instance)
+        artboard.bind(viewModelInstance: instance)
+        boundInstance = instance
+        boundViewModelName = viewModel.name
+        dataBindingRoots = DataBindingNode.nodes(of: instance)
+        dataBindingRoots.forEach { $0.observe { [weak self] in self?.dataBindingRevision += 1 } }
+        log.notice("data binding: \(viewModel.name, privacy: .public)/\(instance.name, privacy: .public) properties=\(instance.propertyCount)")
+    }
+
+    /// Called after the inspector writes a bound property; redraws when playback is paused.
+    func dataBindingDidChange() {
+        dataBindingRevision += 1
+        if !isPlaying { viewModel?.riveView?.advance(delta: 0) }
     }
 
     private func rebuildInputs() {
@@ -258,6 +296,7 @@ final class PlayerController {
         isPlaying = true
         append(.playback("Restart"))
         rebuildInputs()
+        bindDataModel()
     }
 
     // MARK: Inputs
