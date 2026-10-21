@@ -23,6 +23,9 @@ release: project
 
 # Copies the Release build to ~/Applications and tells LaunchServices, PlugInKit and Quick Look about it.
 install: release
+	-pluginkit -r "$(DERIVED)/Build/Products/Debug/$(APP_NAME)/Contents/PlugIns/RiveQuickLook.appex" 2>/dev/null
+	-pluginkit -r "$(DERIVED)/Build/Products/Debug/$(APP_NAME)/Contents/PlugIns/RiveThumbnail.appex" 2>/dev/null
+	-$(LSREGISTER) -u "$(DERIVED)/Build/Products/Debug/$(APP_NAME)" >/dev/null 2>&1
 	rm -rf "$(INSTALL_DIR)/$(APP_NAME)"
 	mkdir -p "$(INSTALL_DIR)"
 	cp -R "$(DERIVED)/Build/Products/Release/$(APP_NAME)" "$(INSTALL_DIR)/"
