@@ -25,6 +25,9 @@ targets:
   RiveViewer:
     type: application
     platform: macOS
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     sources:
       - RiveViewer
     info:

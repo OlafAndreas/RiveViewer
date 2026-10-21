@@ -57,6 +57,7 @@ Everything logs to the unified log under the subsystem `no.olafandreas.RiveViewe
 - `RiveQuickLook` — the Quick Look preview extension.
 - `RiveThumbnail` — the Quick Look thumbnail extension.
 - `Scripts/generate-rive-schema.sh` — regenerates `RiveSchema.swift` from a rive-runtime checkout.
+- `Scripts/render-app-icon.swift` — draws the app icon; regenerate the asset catalog sizes with `swift Scripts/render-app-icon.swift RiveViewer/Assets.xcassets/AppIcon.appiconset` and `sips -z`.
 
 ## Known limits
 
