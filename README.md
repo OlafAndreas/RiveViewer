@@ -1,4 +1,16 @@
-# RiveViewer
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="Assets/wordmark-dark.svg">
+    <img src="Assets/wordmark.svg" alt="RiveViewer" width="320">
+  </picture>
+</p>
+
+<p align="center">
+  <a href="https://github.com/OlafAndreas/RiveViewer/actions/workflows/ci.yml"><img src="https://github.com/OlafAndreas/RiveViewer/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-6848FF.svg" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/Swift-6.0%2B-261878.svg" alt="Swift 6.0+">
+  <img src="https://img.shields.io/badge/platform-macOS%2014%2B-6848FF.svg" alt="macOS 14+">
+</p>
 
 A macOS inspector for Rive (`.riv`) animation files, plus Quick Look extensions so Finder plays them with the space bar and shows them as icons.
 
@@ -70,6 +82,7 @@ Everything logs to the unified log under the subsystem `no.olafandreas.RiveViewe
 - `RiveQuickLook` — the Quick Look preview extension.
 - `RiveThumbnail` — the Quick Look thumbnail extension.
 - `Scripts/generate-rive-schema.sh` — regenerates `RiveSchema.swift` from a rive-runtime checkout.
+- `Assets` — the logo and the README wordmarks, as SVG drawn after the app icon; keep them in step with `Scripts/render-app-icon.swift`.
 - `Scripts/render-app-icon.swift` — draws the app icon; regenerate the asset catalog sizes with `swift Scripts/render-app-icon.swift RiveViewer/Assets.xcassets/AppIcon.appiconset` and `sips -z`.
 
 ## Known limits

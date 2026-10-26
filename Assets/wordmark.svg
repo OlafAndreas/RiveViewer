@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 160" width="540" height="160" role="img" aria-label="RiveViewer">
+  <g transform="translate(16 16) scale(0.125)">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#6848FF"/>
+        <stop offset="1" stop-color="#261878"/>
+      </linearGradient>
+      <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.18"/>
+        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+      </linearGradient>
+      <clipPath id="squircle"><rect width="1024" height="1024" rx="229"/></clipPath>
+      <filter id="shadow-curve" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="15" stdDeviation="15" flood-color="#000000" flood-opacity="0.35"/></filter>
+      <filter id="shadow-key" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000000" flood-opacity="0.3"/></filter>
+      <filter id="shadow-glass" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="13" stdDeviation="13" flood-color="#000000" flood-opacity="0.4"/></filter>
+    </defs>
+    <rect width="1024" height="1024" rx="229" fill="url(#bg)"/>
+    <rect width="1024" height="512" fill="url(#sheen)" clip-path="url(#squircle)"/>
+    <path d="M 170 724 C 420 724 560 264 860 284" fill="none" stroke="#FFFFFF" stroke-width="54" stroke-linecap="round" filter="url(#shadow-curve)"/>
+    <g fill="#FFD250" stroke="#FFFFFF" stroke-width="10" stroke-linejoin="round">
+      <path d="M 170 678 L 216 724 L 170 770 L 124 724 Z" filter="url(#shadow-key)"/>
+      <path d="M 515 458 L 561 504 L 515 550 L 469 504 Z" filter="url(#shadow-key)"/>
+      <path d="M 860 238 L 906 284 L 860 330 L 814 284 Z" filter="url(#shadow-key)"/>
+    </g>
+    <g fill="none" stroke="#FFFFFF" filter="url(#shadow-glass)">
+      <circle cx="710" cy="724" r="150" stroke-width="56"/>
+      <path d="M 820 844 L 905 929" stroke-width="70" stroke-linecap="round"/>
+    </g>
+    <circle cx="710" cy="724" r="122" fill="#FFFFFF" fill-opacity="0.12"/>
+  </g>
+  <text x="172" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="68" font-weight="800" letter-spacing="-1.5" fill="#1C1E26">Rive<tspan fill="#6848FF" font-weight="600">Viewer</tspan></text>
+  <text x="174" y="134" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="600" letter-spacing="2.5" fill="#6848FF">INSPECT · PREVIEW · EXPORT</text>
+</svg>
