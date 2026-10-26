@@ -15,7 +15,7 @@ settings:
     SWIFT_VERSION: "6.0"
     SWIFT_STRICT_CONCURRENCY: complete
     MACOSX_DEPLOYMENT_TARGET: "14.0"
-    # Signed with the owner's team so Xcode Cloud can archive and notarize a Developer ID build.
+    # Signed with the owner's team so an archive can be notarized as a Developer ID build.
     # To build under another team, change DEVELOPMENT_TEAM (and the bundle id prefix above).
     CODE_SIGN_STYLE: Automatic
     DEVELOPMENT_TEAM: J69ZPVRMCE

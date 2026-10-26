@@ -44,14 +44,14 @@ make install   # builds Release, copies to ~/Applications and registers the Quic
 
 | Command | What it does |
 | --- | --- |
-| `make project` | Regenerates `RiveViewer.xcodeproj` from `project.yml`. The project file is committed (Xcode Cloud builds it), so after editing `project.yml` run this and commit both. |
+| `make project` | Regenerates `RiveViewer.xcodeproj` from `project.yml`. The project file is committed so the app opens in Xcode without XcodeGen; after editing `project.yml` run this and commit both. |
 | `make build` | Debug build of the app and both extensions into `./build`. |
 | `make test` | Runs the `RiveViewerKit` unit tests with `swift test`. |
 | `make install` | Release build, copies `RiveViewer.app` to `~/Applications` and registers it with LaunchServices, PlugInKit and Quick Look. |
 | `make register APP=path/to/RiveViewer.app` | Registers an already built app bundle (the Debug build by default). |
 | `make preview FILE=some.riv` | Opens a Quick Look panel for a file with `qlmanage`. |
 
-Builds are signed with the owner's team (automatic signing, hardened runtime on), so Xcode Cloud can archive, sign with Developer ID and notarize. To build under your own team, change `DEVELOPMENT_TEAM` in `project.yml` and run `make project`.
+Builds are signed with the owner's team (automatic signing, hardened runtime on), so an archive can be signed with Developer ID and notarized. To build under your own team, change `DEVELOPMENT_TEAM` in `project.yml` and run `make project`.
 
 ## Quick Look registration
 
