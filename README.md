@@ -36,7 +36,7 @@ Requires macOS 14 or later. Built with Xcode 27, Swift 6, the official [Rive App
 
 ```sh
 brew install xcodegen
-git clone <this repository>
+git clone https://github.com/OlafAndreas/RiveViewer.git
 cd RiveViewer
 make install   # builds Release, copies to ~/Applications and registers the Quick Look extensions
 ```
@@ -80,4 +80,4 @@ Everything logs to the unified log under the subsystem `no.olafandreas.RiveViewe
 
 ## License
 
-MIT, see [LICENSE](LICENSE). The test fixtures in `Packages/RiveViewerKit/Tests/RiveViewerKitTests/Fixtures` come from [rive-app/rive-ios](https://github.com/rive-app/rive-ios) under its MIT license.
+MIT, see [LICENSE](LICENSE). The test fixtures in `Packages/RiveViewerKit/Tests/RiveViewerKitTests/Fixtures` come from [rive-app/rive-ios](https://github.com/rive-app/rive-ios) under its MIT license. The type and property names in `RiveSchema.swift` are generated from [rive-app/rive-runtime](https://github.com/rive-app/rive-runtime), also MIT.
